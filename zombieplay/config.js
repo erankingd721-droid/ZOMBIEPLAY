@@ -11,7 +11,7 @@ window.SITE_CONFIG = {
     channelId: "UCGJrR9YJPbWkr3HizjM0MPg",
     // אופציונלי: מפתח YouTube Data API. עם מפתח, מספר המנויים מתעדכן בזמן אמת
     // והאתר מזהה גם לייב ביוטיוב (בלי מפתח: לייב מזוהה רק מ-Kick). הסבר ב-README.
-    apiKey: "",
+    apiKey: "AIzaSyB8LhTUuBsUKYkMhtMJstFhkW86lvykEKA",   // נעול לכתובות של האתרים ב-Google Cloud
   },
   kick: "zombieplay55",
 
