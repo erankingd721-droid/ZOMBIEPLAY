@@ -1,0 +1,62 @@
+/* =====================================================================
+   עיצוב שמיוחד לאתר הזה (מעל style.css המשותף): הפונט של פורטנייט.
+   Burbank Big Condensed Black הוא הפונט של פורטנייט. אין בו אותיות בעברית,
+   אז הוא חל על אנגלית ומספרים, והעברית נשארת בפונטים של האתר.
+   ===================================================================== */
+@font-face {
+  font-family: "Burbank Big Condensed";
+  src: url("../fonts/burbank-big-condensed-black.otf") format("opentype");
+  font-weight: 100 900;          /* קובץ אחד (Black) לכל המשקלים, בלי הדגשה מלאכותית */
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --fn: "Burbank Big Condensed", "Karantina", "Rubik", system-ui, sans-serif;   /* כותרות, לוגו ומספרים */
+  --fn-ui: "Burbank Big Condensed", "Rubik", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;   /* תוויות קטנות */
+  --display: var(--fn);
+}
+
+/* ---------- הלוגו בטקסט ---------- */
+.brand__word,
+.hero__word,
+.about__word,
+.footer__word {
+  font-family: var(--fn);
+  font-style: normal;
+  letter-spacing: .01em;
+}
+.brand__word { font-size: 33px; }
+.hero__word { font-size: min(180px, calc(100cqi / (var(--word-part) * .52))); line-height: .82; }
+.about__word { font-size: min(360px, calc(96vw / (var(--word-part) * .5))); }
+.footer__word { font-size: min(320px, calc(92vw / (var(--word-len) * .5))); }
+
+/* ---------- כותרות ותוויות ---------- */
+.hero__name { font-family: var(--fn); font-size: clamp(22px, 2vw, 28px); letter-spacing: .02em; }
+.eyebrow { font-family: var(--fn-ui); font-size: 16px; letter-spacing: .08em; }
+.chip,
+.status { font-family: var(--fn-ui); font-size: 15px; letter-spacing: .06em; }
+.clip__dur,
+.clip__type { font-family: var(--fn-ui); font-size: 15px; letter-spacing: .04em; line-height: 1.15; }
+.link-row__name { font-family: var(--fn); font-size: clamp(26px, 2.5vw, 31px); letter-spacing: .02em; }
+.step__num { font-family: var(--fn); }
+
+/* ---------- מספרים ---------- */
+.hero__stats dd { font-family: var(--fn); font-size: 30px; line-height: 1.1; letter-spacing: .02em; }
+.fact__title { font-family: var(--fn); font-size: clamp(26px, 2.5vw, 32px); letter-spacing: .02em; }
+.kv b { font-family: var(--fn); font-size: 30px; letter-spacing: .02em; }
+.card--last .kv b { font-size: 21px; }
+.goal__num { font-family: var(--fn); font-size: clamp(36px, 3.8vw, 46px); letter-spacing: .02em; }
+.goal__target b { font-family: var(--fn); font-size: 23px; letter-spacing: .02em; }
+.top__rank { font-family: var(--fn); font-size: 24px; }
+.schedule .num { font-family: var(--fn); font-size: 28px; }
+
+/* הקוד בפתק ליד המסך */
+.sticker b { font-family: var(--fn); font-size: 36px; line-height: 1; letter-spacing: .03em; }
+
+@media (max-width: 520px) {
+  .brand__word { font-size: 27px; }
+  .hero__stats dd { font-size: 26px; }
+  .kv b { font-size: 26px; }
+  .sticker b { font-size: 30px; }
+}
