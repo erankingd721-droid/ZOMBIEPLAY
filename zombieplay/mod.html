@@ -50,6 +50,12 @@
     .mod-info li { margin:5px 0; }
     .mod-info code { padding:2px 6px; border-radius:6px; background:var(--ink); color:var(--accent); direction:ltr; unicode-bidi:embed; }
     .mod-offline { margin-bottom:16px; padding:12px 16px; border:1px solid var(--live); border-radius:12px; color:var(--live); }
+    .mod-cg-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .mod-cg-head h2 { margin:0; }
+    .mod-eye { width:46px; height:46px; display:grid; place-items:center; flex:none; border:1px solid var(--accent); border-radius:50%; background:rgba(61,255,31,.12); color:var(--accent); cursor:pointer; transition:background .2s, color .2s, border-color .2s; }
+    .mod-eye:hover { background:rgba(61,255,31,.25); }
+    .mod-eye.off { border-color:var(--live); background:rgba(255,59,79,.12); color:var(--live); }
+    .mod-eye svg { width:24px; height:24px; }
     .mod-remove { display:flex; gap:8px; margin-top:12px; }
     .mod-remove input { flex:1; min-width:0; min-height:44px; padding:0 14px; border:1px solid rgba(255,255,255,.22); border-radius:12px; background:var(--ink); color:var(--text); font:inherit; }
     .mod-goal + .mod-goal { margin-top:14px; }
@@ -102,7 +108,7 @@
           </section>
 
           <section class="mod-card">
-            <h2>🎲 משחקי צ׳אט</h2>
+            <div class="mod-cg-head"><h2>🎲 משחקי צ׳אט</h2><button id="cgEye" class="mod-eye" type="button" hidden></button></div>
             <p class="muted" id="cgLine" style="margin-bottom:14px">—</p>
             <div class="mod-actions" id="cgStart"></div>
             <div class="mod-actions" id="cgActions" style="margin-top:10px"></div>
