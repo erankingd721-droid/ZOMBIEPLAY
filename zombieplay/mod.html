@@ -56,6 +56,12 @@
     .mod-eye:hover { background:rgba(61,255,31,.25); }
     .mod-eye.off { border-color:var(--live); background:rgba(255,59,79,.12); color:var(--live); }
     .mod-eye svg { width:24px; height:24px; }
+    .mod-settings { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+    .mod-settings h3 { margin:0 0 10px; font-size:16px; color:var(--accent); }
+    .mod-set { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0; font-size:14px; color:var(--dim); flex-wrap:wrap; }
+    .mod-set span { display:flex; gap:8px; align-items:center; }
+    .mod-set input, .mod-set select { width:88px; min-height:40px; padding:0 10px; border:1px solid rgba(255,255,255,.22); border-radius:10px; background:var(--ink); color:var(--text); font:inherit; direction:ltr; text-align:center; }
+    .mod-set select { width:auto; direction:rtl; }
     .mod-remove { display:flex; gap:8px; margin-top:12px; }
     .mod-remove input { flex:1; min-width:0; min-height:44px; padding:0 14px; border:1px solid rgba(255,255,255,.22); border-radius:12px; background:var(--ink); color:var(--text); font:inherit; }
     .mod-goal + .mod-goal { margin-top:14px; }
@@ -112,6 +118,14 @@
             <p class="muted" id="cgLine" style="margin-bottom:14px">—</p>
             <div class="mod-actions" id="cgStart"></div>
             <div class="mod-actions" id="cgActions" style="margin-top:10px"></div>
+            <p class="muted" id="cgSeries" style="margin-top:12px;font-size:14px"></p>
+            <div class="mod-settings" id="cgSettings" hidden>
+              <h3>⚙️ הגדרות משחקים</h3>
+              <label class="mod-set">משחקים בסדרה (0 = בלי עצירה)<span><input id="setGames" type="number" min="0" max="50"><button class="btn btn--ghost btn--sm" type="button" data-set="games">שמור</button></span></label>
+              <label class="mod-set">הפסקה בין משחקים (שניות)<span><input id="setGap" type="number" min="3" max="600"><button class="btn btn--ghost btn--sm" type="button" data-set="gap">שמור</button></span></label>
+              <label class="mod-set">המשך אוטומטי אחרי הסיכום (שניות, 0 = המוד מחליט)<span><input id="setCont" type="number" min="0" max="900"><button class="btn btn--ghost btn--sm" type="button" data-set="continue">שמור</button></span></label>
+              <label class="mod-set">זמן למשחק (שניות)<span><select id="setType"></select><input id="setTime" type="number" min="10" max="900"><button class="btn btn--ghost btn--sm" type="button" data-set="time">שמור</button></span></label>
+            </div>
             <p class="mod-msg" id="cgMsg" role="status"></p>
             <p class="muted" style="margin-top:10px;font-size:13px"><a href="games.html" style="color:var(--accent)">פתח את המשחקים</a> · בצ׳אט: <code>!cg start hangman · skip · stop · auto on|off</code></p>
           </section>
