@@ -161,6 +161,7 @@
   var lastHtml = '';
   function render() {
     if (!state) { root.innerHTML = ''; return; }
+    if (!state.enabled && document.body.classList.contains('overlay')) { root.innerHTML = ''; lastHtml = ''; return; } // off: nothing on the stream
     var r = state.round;
     var main;
     if (!state.enabled) main = '<div class="card idle"><h2>משחקי הצ׳אט כבויים</h2></div>';

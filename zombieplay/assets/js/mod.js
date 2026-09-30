@@ -192,20 +192,22 @@
 
   // ─── משחקי צ׳אט ─────────────────────────────────────────────────────
   var CG_TYPES = { hangman: '🪢 איש תלוי', riddle: '🧩 חידה', trivia: '🧠 טריוויה', scramble: '🔤 ערבוביה', math: '➗ חשבון', number: '🔢 ניחוש מספר' };
-  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד' };
+  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד', 'cg-off': '⏻ כבה את המשחקים', 'cg-on': '⏻ הפעל את המשחקים' };
   CONFIRM['cg-reset'] = 'לאפס את כל טבלאות הניקוד, גם של כל הזמנים?';
 
   function renderCg(d) {
     var c = d.chatGames || {};
     var acts = d.actions || [];
-    $('#cgLine').textContent = c.enabled === false ? 'משחקי הצ׳אט כבויים ב-config.js.' : (c.running ? 'רץ עכשיו: ' + c.running : 'אין משחק רץ.') + (c.auto ? ' · מצב אוטומטי פועל' : '') + ' · ' + (c.players || 0) + ' שחקנים הערב';
-    var start = acts.indexOf('cg-start') >= 0 ? Object.keys(CG_TYPES) : [];
+    $('#cgLine').textContent = c.off ? 'משחקי הצ׳אט כבויים (מתג). השכבה בשידור ריקה.' : c.enabled === false ? 'משחקי הצ׳אט כבויים ב-config.js.' : (c.running ? 'רץ עכשיו: ' + c.running : 'אין משחק רץ.') + (c.auto ? ' · מצב אוטומטי פועל' : '') + ' · ' + (c.players || 0) + ' שחקנים הערב';
+    var start = acts.indexOf('cg-start') >= 0 && !c.off ? Object.keys(CG_TYPES) : [];
     var sbox = $('#cgStart');
     if (sbox.dataset.sig !== start.join(',')) {
       sbox.dataset.sig = start.join(',');
       sbox.innerHTML = start.map(function (t) { return '<button class="btn btn--ghost btn--sm" type="button" data-t="' + t + '">' + CG_TYPES[t] + '</button>'; }).join('');
     }
-    var other = acts.filter(function (a) { return CG_LABELS[a] && (a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true); });
+    var other = acts.filter(function (a) { if (!CG_LABELS[a]) return false;
+      if (c.off) return a === 'cg-on';
+      return a === 'cg-on' ? false : a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true; });
     var abox = $('#cgActions');
     if (abox.dataset.sig !== other.join(',')) {
       abox.dataset.sig = other.join(',');
