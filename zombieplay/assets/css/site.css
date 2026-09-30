@@ -78,3 +78,44 @@ textarea { font-family: var(--fn-ui); }
 .footer__mod { display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; height: 46px; border: 1px solid var(--line); border-radius: 12px; color: var(--dim); font-weight: 700; transition: transform .2s ease, border-color .2s, color .2s; }
 .footer__mod .icon { width: 20px; height: 20px; }
 .footer__mod:hover { transform: translateY(-3px); border-color: var(--accent); color: var(--accent); }
+
+
+/* ─── מסך טעינה (רק כשיש JavaScript, אחרת הוא לא היה נעלם) ─── */
+.loader { display: none; }
+.js .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  background:
+    radial-gradient(40% 40% at 50% 45%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    var(--ink);
+  transition: opacity .5s ease, visibility .5s ease;
+}
+.js .loader.is-done { opacity: 0; visibility: hidden; }
+.loader__ring { position: relative; display: grid; place-items: center; width: 120px; height: 120px; }
+.loader__ring::before {
+  content: "";
+  position: absolute;
+  inset: -11px;
+  border: 5px solid rgba(255, 255, 255, .08);
+  border-top-color: var(--accent);
+  border-right-color: var(--accent);
+  border-radius: 50%;
+  animation: loader-spin .8s linear infinite;
+}
+.loader__ring img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 44px color-mix(in srgb, var(--accent) 45%, transparent);
+  animation: loader-pulse 1.6s ease-in-out infinite;
+}
+.loader__word { direction: ltr; font-family: var(--fn); font-size: 30px; line-height: 1; letter-spacing: .04em; color: var(--text); }
+.loader__word b { font-weight: 400; color: var(--accent); }
+@keyframes loader-spin { to { transform: rotate(360deg); } }
+@keyframes loader-pulse { 50% { transform: scale(.95); } }
