@@ -73,6 +73,7 @@
     '#cg .sum .ask{margin-top:16px;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.08);font-size:clamp(16px,1.8vw,22px);text-align:center}',
     '#cg .sum .ask b{color:var(--acc)}',
     '#cg .left{font-size:18px;font-weight:700;color:#cfe4cb;direction:ltr;unicode-bidi:embed}',
+    '#cg .drawcv{display:block;width:100%;height:auto;margin-top:12px;border-radius:14px;background:#f7f9f3}',
     'body.overlay{background:transparent!important;overflow:hidden}',
     'body.overlay #cg{padding:24px}',
     'body.overlay #cg .wrap{grid-template-columns:minmax(0,900px) 300px;justify-content:center}',
@@ -138,6 +139,19 @@
         return '<div class="opt' + cls + '"><i class="fill" style="width:' + Math.round((r.votes[i] / total) * 100) + '%"></i><b>' + (i + 1) + '</b><span>' + esc(o) + '</span><em>' + r.votes[i] + '</em></div>';
       }).join('') + '</div><div class="cat" style="margin-top:10px">כותבים בצ׳אט את המספר של התשובה (1-4)</div>';
     }
+    if (r.type === 'hotseat') {
+      return '<div class="cat" style="margin-bottom:8px">השאלה רק בשביל: <b style="color:var(--gold)">' + esc(r.viewer) + '</b></div><p class="q">' + esc(r.q) + '</p><div class="opts">' +
+        r.options.map(function (o, i) {
+          var cls = r.correct == null ? '' : i === r.correct ? ' right' : ' wrong';
+          return '<div class="opt' + cls + '"><b>' + (i + 1) + '</b><span>' + esc(o) + '</span></div>';
+        }).join('') + '</div>';
+    }
+    if (r.type === 'draw') {
+      var head = r.phase === 'wait'
+        ? '<div class="cat" style="text-align:center;font-size:22px">ממתינים ש-<b style="color:var(--gold)">' + esc(r.drawer) + '</b> יתחבר לצייר...<br><span style="direction:ltr;unicode-bidi:embed;font-size:15px">' + esc(r.drawUrl) + '</span></div>'
+        : '<div class="cat">מצייר: <b style="color:var(--gold)">' + esc(r.drawer) + '</b> · ' + r.len + ' אותיות · כתבו את הניחוש בצ׳אט</div>' + (r.hint ? tiles(r.hintMask) : '');
+      return head + '<canvas id="drawcv" class="drawcv" width="1000" height="700"></canvas>';
+    }
     if (r.type === 'scramble') return '<div class="cat" style="text-align:center">סדרו את האותיות · ' + esc(r.cat) + '</div>' + tiles(r.letters, 'scr');
     if (r.type === 'math') return '<div class="math">' + esc(r.q) + ' = ?</div><div class="cat" style="text-align:center">הראשון שכותב את התשובה מנצח</div>';
     return '<div class="range">המספר בין <b>' + r.low + '</b> ל-<b>' + r.high + '</b></div><div class="guesses">' +
@@ -150,7 +164,7 @@
       var extra = r.type === 'trivia' && r.correctCount ? r.correctCount + ' ענו נכון' : 'התשובה: ' + r.answer;
       return '<div class="result won">🏆 ' + esc(r.winner || '') + ' ' + (r.type === 'trivia' ? 'ענה נכון ראשון' : 'פתר') + ' · +' + r.points + '<small>' + esc(extra) + '</small></div>';
     }
-    var text = r.status === 'lost' ? '💀 נגמרו החיים' : r.status === 'timeout' ? '⏰ נגמר הזמן' : r.status === 'skipped' ? '⏭️ דילגנו' : '🛑 המשחק נעצר';
+    var text = r.status === 'lost' ? (r.type === 'hotseat' ? '❌ טעות' : '💀 נגמרו החיים') : r.status === 'timeout' ? '⏰ נגמר הזמן' : r.status === 'skipped' ? '⏭️ דילגנו' : '🛑 המשחק נעצר';
     return '<div class="result bad">' + text + '<small>התשובה: ' + esc(r.answer) + '</small></div>';
   }
 
@@ -182,6 +196,28 @@
     return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
   }
 
+  // the drawing of the viewer who draws: strokes are lists of points in 0..1000, the board is 1000 x 700
+  var DRAW_COLORS = ['#111111', '#ff3b4f', '#3b8bff', '#22b10f', '#f5c400', '#a45bff', '#ff8a00', '#7a4b22'];
+  function paintDrawing() {
+    var cv = document.getElementById('drawcv');
+    if (!cv || !state || !state.round || state.round.type !== 'draw') return;
+    var c = cv.getContext('2d');
+    c.fillStyle = '#f7f9f3';
+    c.fillRect(0, 0, 1000, 700);
+    c.lineCap = 'round';
+    c.lineJoin = 'round';
+    (state.round.strokes || []).forEach(function (st) {
+      c.strokeStyle = c.fillStyle = DRAW_COLORS[st.c] || '#111111';
+      c.lineWidth = st.w * 1.8;
+      var p = st.p;
+      if (p.length === 2) { c.beginPath(); c.arc(p[0], p[1] * 0.7, st.w, 0, 6.3); c.fill(); return; }
+      c.beginPath();
+      c.moveTo(p[0], p[1] * 0.7);
+      for (var i = 2; i < p.length; i += 2) c.lineTo(p[i], p[i + 1] * 0.7);
+      c.stroke();
+    });
+  }
+
   var lastHtml = '';
   function render() {
     if (!state) { root.innerHTML = ''; return; }
@@ -199,6 +235,7 @@
       (!online && Date.now() - lastOk > 15000 ? '<div class="off nochrome">משחקי הצ׳אט לא זמינים כרגע. הם עולים כשערן בלייב והבוט רץ.</div>' : '');
     root.className = SHOW_BOARD ? '' : 'noboard';
     if (html !== lastHtml) { root.innerHTML = html; lastHtml = html; }
+    paintDrawing();
   }
 
   // the timer bar keeps moving between polls
