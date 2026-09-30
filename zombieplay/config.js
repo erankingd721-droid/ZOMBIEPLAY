@@ -85,6 +85,11 @@ window.SITE_CONFIG = {
     url: "https://dayroom-pope-reseller.ngrok-free.dev/public/game",
   },
 
+  // משחקי צ'אט (games.html): איש תלוי, חידות, טריוויה ועוד. המצב מגיע מהבוט. הכתובת: אותה כתובת ngrok עם /public/games.
+  chatGames: {
+    url: "https://dayroom-pope-reseller.ngrok-free.dev/public/games",
+  },
+
   // אזור מודים ומנהל (mod.html). הקודים נמצאים בלוח הבקרה של הבוט ולא כאן.
   // url: אותה כתובת ngrok, עם /mod בסוף.
   modArea: {
