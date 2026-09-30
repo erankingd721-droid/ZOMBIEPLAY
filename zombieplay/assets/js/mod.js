@@ -134,6 +134,7 @@
     }).join('');
 
     renderActions(d.actions || [], g.enabled);
+    renderGame(d);
     var rec = d.recent || [];
     $('#recent').innerHTML = rec.length
       ? rec.map(function (r) {
@@ -159,7 +160,7 @@
   };
 
   function renderActions(allowed, enabled) {
-    var list = allowed.filter(function (a) { return a === 'off' ? enabled !== false : a === 'on' ? enabled === false : true; });
+    var list = allowed.filter(function (a) { return a.indexOf('game-') === 0 ? false : a === 'off' ? enabled !== false : a === 'on' ? enabled === false : true; });
     var box = $('#actions');
     var sig = list.join(',');
     if (box.dataset.sig === sig) return;
@@ -169,15 +170,11 @@
     }).join('');
   }
 
-  $('#actions').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-a]');
-    if (!b) return;
-    var action = b.dataset.a;
+  function send(action, arg, msg) {
     if (CONFIRM[action] && !confirm(CONFIRM[action])) return;
-    var msg = $('#actionMsg');
     msg.style.color = 'var(--dim)';
     msg.textContent = 'שולח…';
-    api('/action', { method: 'POST', body: JSON.stringify({ action: action }) })
+    api('/action', { method: 'POST', body: JSON.stringify({ action: action, arg: arg || '' }) })
       .then(function (r) {
         if (r.status === 401) return showLogin('החיבור פג. הכנס את הקוד שוב.');
         msg.style.color = r.status === 200 ? 'var(--accent)' : 'var(--live)';
@@ -185,6 +182,44 @@
         refresh();
       })
       .catch(function () { msg.style.color = 'var(--live)'; msg.textContent = 'הבוט לא זמין.'; });
+  }
+
+  $('#actions').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]');
+    if (b) send(b.dataset.a, '', $('#actionMsg'));
+  });
+
+  // ─── פארק הזומבים ──────────────────────────────────────────────────
+  var GAME_LABELS = {
+    'game-chaos': '⚡ כאוס בפארק',
+    'game-clear': '🧽 נקה את הגרפיטי',
+    'game-pause': '⏸️ הפסק את הפארק',
+    'game-resume': '▶️ המשך את הפארק',
+    'game-reset': '🧹 אפס את הפארק',
+  };
+  CONFIRM['game-reset'] = 'להוציא את כל הזומבים ולנקות את הפארק?';
+
+  function renderGame(d) {
+    var g = d.game || {};
+    var names = (g.names || []).slice(0, 14).join(', ');
+    $('#gameLine').textContent = !g.enabled ? 'הפארק כבוי ב-config.js.' : (g.players || 0) + ' זומבים בפארק' + (g.paused ? ' · בהפסקה' : '') + (names ? ': ' + names : '');
+    var allowed = (d.actions || []).filter(function (a) { return GAME_LABELS[a] && (a === 'game-pause' ? !g.paused : a === 'game-resume' ? !!g.paused : true); });
+    var box = $('#gameActions');
+    var sig = allowed.join(',');
+    if (box.dataset.sig !== sig) {
+      box.dataset.sig = sig;
+      box.innerHTML = allowed.map(function (a) { return '<button class="btn btn--ghost btn--sm" type="button" data-a="' + a + '">' + GAME_LABELS[a] + '</button>'; }).join('');
+    }
+    $('#removeForm').hidden = (d.actions || []).indexOf('game-remove') < 0;
+  }
+  $('#gameActions').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]');
+    if (b) send(b.dataset.a, '', $('#gameMsg'));
+  });
+  $('#removeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = $('#removeName').value.trim();
+    if (name) { send('game-remove', name, $('#gameMsg')); $('#removeName').value = ''; }
   });
 
   // ─── מידע למודים (מ-config.js) ─────────────────────────────────────
