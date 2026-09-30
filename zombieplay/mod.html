@@ -50,6 +50,8 @@
     .mod-info li { margin:5px 0; }
     .mod-info code { padding:2px 6px; border-radius:6px; background:var(--ink); color:var(--accent); direction:ltr; unicode-bidi:embed; }
     .mod-offline { margin-bottom:16px; padding:12px 16px; border:1px solid var(--live); border-radius:12px; color:var(--live); }
+    .mod-remove { display:flex; gap:8px; margin-top:12px; }
+    .mod-remove input { flex:1; min-width:0; min-height:44px; padding:0 14px; border:1px solid rgba(255,255,255,.22); border-radius:12px; background:var(--ink); color:var(--text); font:inherit; }
     .mod-goal + .mod-goal { margin-top:14px; }
     .mod-goal__top { display:flex; justify-content:space-between; gap:10px; margin-bottom:6px; font-size:14px; }
     .mod-goal__top b { font-size:20px; }
@@ -97,6 +99,18 @@
             </div>
             <div class="mod-actions" id="actions"></div>
             <p class="mod-msg" id="actionMsg" role="status"></p>
+          </section>
+
+          <section class="mod-card">
+            <h2>🎮 פארק הזומבים</h2>
+            <p class="muted" id="gameLine" style="margin-bottom:14px">—</p>
+            <div class="mod-actions" id="gameActions"></div>
+            <form id="removeForm" class="mod-remove" hidden autocomplete="off">
+              <input id="removeName" type="text" maxlength="30" placeholder="שם של זומבי להוצאה מהפארק">
+              <button class="btn btn--ghost btn--sm" type="submit">🚪 הוצא</button>
+            </form>
+            <p class="mod-msg" id="gameMsg" role="status"></p>
+            <p class="muted" style="margin-top:10px;font-size:13px"><a href="game.html" style="color:var(--accent)">פתח את הפארק</a> · בצ׳אט: <code>!park chaos · clear · pause · resume · reset · remove שם</code></p>
           </section>
 
           <section class="mod-card">

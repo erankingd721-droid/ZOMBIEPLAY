@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>פארק הזומבים | ZombiePlay</title>
+  <meta name="description" content="פארק הזומבים: משחק לצופים של ZombiePlay. כותבים פקודות בצ'אט של הלייב והזומבי שלכם מסתובב בפארק.">
+  <meta name="theme-color" content="#0d0f0d">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Rubik:ital,wght@0,400..900;1,700..900&display=swap">
+  <link rel="preload" href="assets/fonts/burbank-big-condensed-black.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js"></script>
+  <style>
+    .g-top { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; }
+    .g-top a { color:var(--dim); font-size:14px; text-decoration:none; }
+    .g-top a:hover { color:var(--accent); }
+    .g-title { margin:0 0 6px; font-size:clamp(40px,7vw,72px); line-height:1; }
+    .g-wrap { padding:8px 0 80px; }
+    #park { display:block; width:100%; height:auto; aspect-ratio:16/9; margin-top:18px; border:1px solid var(--line); border-radius:18px; background:#0a130e; }
+    .g-status { margin:12px 0 0; padding:10px 14px; border:1px solid var(--live); border-radius:12px; color:var(--live); }
+    .g-help { display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); margin-top:26px; }
+    .g-card { padding:20px; border:1px solid var(--line); border-radius:18px; background:var(--ink-2); }
+    .g-card h2 { margin:0 0 10px; font-size:22px; color:var(--accent); }
+    .g-card ul { margin:0; padding:0; list-style:none; }
+    .g-card li { padding:4px 0; font-size:15px; }
+    .g-card code { padding:1px 7px; border-radius:6px; background:var(--ink); color:var(--accent); direction:ltr; unicode-bidi:embed; }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="g-top">
+      <a href="./">→ חזרה לאתר</a>
+      <span class="brand__word"><span>ZOMBIE</span><b>PLAY</b></span>
+    </div>
+
+    <main class="g-wrap">
+      <p class="eyebrow">VIEWERS GAME</p>
+      <h1 class="g-title display">פארק הזומבים</h1>
+      <p class="muted">משחק לצופים. כותבים פקודות בצ׳אט של הלייב ב-Kick והזומבי שלכם מסתובב בפארק. כרגע בפארק: <b id="count" class="num" style="color:var(--accent)">0</b></p>
+
+      <canvas id="park" data-stickers="assets/img/stickers/" aria-label="פארק הזומבים"></canvas>
+      <p class="g-status" id="status" hidden></p>
+
+      <div class="g-help">
+        <section class="g-card"><h2>כניסה ויציאה</h2><ul>
+          <li><code>visit!</code> להיכנס לפארק</li>
+          <li><code>leave!</code> לצאת</li>
+          <li><code>status!</code> / <code>where!</code> איפה אני ומה אני עושה</li>
+        </ul></section>
+        <section class="g-card"><h2>פעילויות</h2><ul>
+          <li><code>slide!</code> מגלשת הקברים</li>
+          <li><code>swim!</code> / <code>dive!</code> בריכת הרעל</li>
+          <li><code>eat!</code> מאפיית המוחות · <code>drink!</code> בר הדם</li>
+          <li><code>relax!</code> מדורה · <code>sleep!</code> חדר שינה</li>
+          <li><code>dance!</code> ריקודים · <code>rise!</code> לצאת מהקבר · <code>random!</code> הפתעה</li>
+        </ul></section>
+        <section class="g-card"><h2>אני ואחרים</h2><ul>
+          <li><code>color red!</code> צבע: red blue green yellow purple pink orange white</li>
+          <li><code>hat!</code> כובע אקראי</li>
+          <li><code>meet שם!</code> לפגוש · <code>follow שם!</code> לעקוב</li>
+          <li><code>fight שם!</code> קרב! מי שמפסיד בורח בוכה</li>
+          <li><code>graffiti טקסט!</code> לכתוב על הקיר (עד 24 תווים)</li>
+        </ul></section>
+        <section class="g-card"><h2>כאוס</h2><ul>
+          <li><code>fire!</code> שריפה · <code>sabotage!</code> חבלה</li>
+          <li><code>malfunction!</code> תקלה בבריכה · <code>chaos!</code> כאוס כללי</li>
+          <li>מנוחה בין כאוסים: 15 דקות, למנויים 7.</li>
+        </ul></section>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/game.js"></script>
+</body>
+</html>

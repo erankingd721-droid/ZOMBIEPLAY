@@ -80,6 +80,11 @@ window.SITE_CONFIG = {
     everySeconds: 30,
   },
 
+  // פארק הזומבים (game.html): משחק לצופים. המצב מגיע מהבוט. הכתובת: אותה כתובת ngrok עם /public/game.
+  game: {
+    url: "https://dayroom-pope-reseller.ngrok-free.dev/public/game",
+  },
+
   // אזור מודים ומנהל (mod.html). הקודים נמצאים בלוח הבקרה של הבוט ולא כאן.
   // url: אותה כתובת ngrok, עם /mod בסוף.
   modArea: {
