@@ -31,6 +31,30 @@
 </head>
 <body>
 
+<!-- מסך טעינה: התמונה מהערוץ, עם טבעת שמסתובבת, עד שהאתר מוכן -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__ring"><img src="assets/img/favicon-192.png" alt="" width="120" height="120"></div>
+  <div class="loader__word">ZOMBIE<b>PLAY</b></div>
+</div>
+<script>
+  (() => {
+    const el = document.getElementById('loader');
+    const t0 = Date.now();
+    let done = false;
+    const hide = () => {
+      if (done) return;
+      done = true;
+      // מוצג לפחות רגע, כדי שלא יהבהב
+      setTimeout(() => {
+        el.classList.add('is-done');
+        setTimeout(() => el.remove(), 600);
+      }, Math.max(0, 800 - (Date.now() - t0)));
+    };
+    addEventListener('load', hide, { once: true });
+    setTimeout(hide, 3500); // לא מחכים יותר מדי לתמונות איטיות
+  })();
+</script>
+
 <!-- ============ אייקונים ============ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -97,8 +121,6 @@
       <a href="#links">לינקים</a>
       <a href="#community">הקהילה</a>
       <a href="#stickers">סטיקרים</a>
-      <a href="games.html">משחקי צ׳אט</a>
-      <a href="game.html">פארק</a>
     </nav>
 
     <div class="nav__cta">
