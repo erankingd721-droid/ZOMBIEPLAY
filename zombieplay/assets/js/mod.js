@@ -192,7 +192,7 @@
 
   // ─── משחקי צ׳אט ─────────────────────────────────────────────────────
   var CG_TYPES = { hangman: '🪢 איש תלוי', riddle: '🧩 חידה', trivia: '🧠 טריוויה', scramble: '🔤 ערבוביה', math: '➗ חשבון', number: '🔢 ניחוש מספר' };
-  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד', };
+  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד', 'cg-continue': '▶️ המשך', 'cg-summary': '📊 סיכום' };
   var EYE_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   var EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.1-5.9M9.9 4.2A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>';
   var cgOff = false;
@@ -214,13 +214,54 @@
     eye.className = 'mod-eye' + (cgOff ? ' off' : '');
     eye.innerHTML = cgOff ? EYE_OFF : EYE_ON;
     eye.title = eye.ariaLabel = cgOff ? 'המשחקים מוסתרים. לחיצה מחזירה אותם' : 'המשחקים מוצגים. לחיצה מסתירה ומכבה אותם';
-    var other = cgOff ? [] : acts.filter(function (a) { return CG_LABELS[a] && (a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true); });
+    var other = cgOff ? [] : acts.filter(function (a) {
+      if (!CG_LABELS[a]) return false;
+      if (a === 'cg-continue') return !!c.pause;
+      if (a === 'cg-summary') return !c.running && !c.pause;
+      return a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true;
+    });
+    var ser = c.series || { games: 0, done: 0 };
+    $('#cgSeries').textContent = cgOff ? '' : (ser.games > 0 ? 'סדרה: ' + Math.min(ser.done, ser.games) + ' מתוך ' + ser.games + ' משחקים' : 'ללא עצירה בין משחקים') + (c.pause ? ' · ⏸️ הסיכום על המסך, מחכים להחלטה (המשך או עצור)' : '');
+    fillSettings(c, acts);
     var abox = $('#cgActions');
     if (abox.dataset.sig !== other.join(',')) {
       abox.dataset.sig = other.join(',');
       abox.innerHTML = other.map(function (a) { return '<button class="btn btn--ghost btn--sm" type="button" data-a="' + a + '">' + CG_LABELS[a] + '</button>'; }).join('');
     }
   }
+  // settings (admin): the boxes are filled from the bot, but never while somebody is typing in them
+  function fillSettings(c, acts) {
+    var form = $('#cgSettings');
+    form.hidden = acts.indexOf('cg-set') < 0 || !!c.off;
+    var st = c.settings;
+    if (form.hidden || !st || form.contains(document.activeElement)) return;
+    var sel = $('#setType');
+    if (!sel.options.length) {
+      Object.keys(CG_TYPES).forEach(function (t) {
+        var o = document.createElement('option');
+        o.value = t;
+        o.textContent = CG_TYPES[t];
+        sel.appendChild(o);
+      });
+    }
+    $('#setGames').value = st.games;
+    $('#setGap').value = st.gap;
+    $('#setCont').value = st.continueAfter;
+    $('#setTime').value = st.seconds[sel.value];
+    form.dataset.seconds = JSON.stringify(st.seconds);
+  }
+  $('#setType').addEventListener('change', function () {
+    try { $('#setTime').value = JSON.parse($('#cgSettings').dataset.seconds)[this.value]; } catch (e) {}
+  });
+  $('#cgSettings').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-set]');
+    if (!b) return;
+    var key = b.dataset.set;
+    var arg = key === 'time' ? 'time ' + $('#setType').value + ' ' + $('#setTime').value
+      : key + ' ' + $(key === 'games' ? '#setGames' : key === 'gap' ? '#setGap' : '#setCont').value;
+    send('cg-set', arg, $('#cgMsg'));
+  });
+
   $('#cgEye').addEventListener('click', function () { send(cgOff ? 'cg-on' : 'cg-off', '', $('#cgMsg')); });
   $('#cgStart').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-t]');

@@ -64,6 +64,15 @@
     '#cg .board li b{color:var(--acc)}',
     '#cg .board .none{color:#9fb39a;font-size:15px}',
     '#cg .off{position:fixed;inset-inline:0;bottom:12px;text-align:center;color:#ff9b9b;font-size:14px}',
+    '#cg .sum h2{margin:0 0 12px;font-size:30px;font-weight:900;color:var(--gold)}',
+    '#cg .sum table{width:100%;border-collapse:collapse;font-size:clamp(18px,2.2vw,28px)}',
+    '#cg .sum td{padding:8px 10px;border-bottom:1px solid var(--line)}',
+    '#cg .sum tr:first-child td{font-weight:900;color:var(--gold)}',
+    '#cg .sum td.pts{text-align:left;font-weight:900;color:var(--acc);white-space:nowrap}',
+    '#cg .sum td.ans{text-align:left;color:#b9d6b4;font-size:.75em;white-space:nowrap}',
+    '#cg .sum .ask{margin-top:16px;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.08);font-size:clamp(16px,1.8vw,22px);text-align:center}',
+    '#cg .sum .ask b{color:var(--acc)}',
+    '#cg .left{font-size:18px;font-weight:700;color:#cfe4cb;direction:ltr;unicode-bidi:embed}',
     'body.overlay{background:transparent!important;overflow:hidden}',
     'body.overlay #cg{padding:24px}',
     'body.overlay #cg .wrap{grid-template-columns:minmax(0,900px) 300px;justify-content:center}',
@@ -153,9 +162,24 @@
   function board(s) {
     var rows = (s.board || []).length ? s.board : [];
     return '<aside class="card board"><h2>🏆 הטבלה של הערב</h2>' +
-      (rows.length ? '<ol>' + rows.slice(0, 6).map(function (e, i) { return '<li><span>' + (i + 1) + '. ' + esc(e.n) + '</span><b>' + e.p + '</b></li>'; }).join('') + '</ol>' : '<div class="none">עוד אין ניקוד. הראשון שעונה נכון מקבל נקודות!</div>') +
+      (rows.length ? '<ol>' + rows.slice(0, 6).map(function (e, i) { return '<li><span>' + (i + 1) + '. ' + esc(e.n) + '</span><b>' + e.p + (e.a ? ' <small style="color:#9fc79a;font-weight:500">· ' + e.a + '✓</small>' : '') + '</b></li>'; }).join('') + '</ol>' : '<div class="none">עוד אין ניקוד. הראשון שעונה נכון מקבל נקודות!</div>') +
       ((s.allTime || []).length ? '<h2 style="margin-top:16px;font-size:16px">כל הזמנים</h2><ol>' + s.allTime.slice(0, 3).map(function (e, i) { return '<li><span>' + (i + 1) + '. ' + esc(e.n) + '</span><b>' + e.p + '</b></li>'; }).join('') + '</ol>' : '') +
       '</aside>';
+  }
+
+  function summaryCard(s) {
+    var b = s.brk;
+    var rows = (b.top || []).map(function (e, i) {
+      return '<tr><td>' + (i + 1) + '</td><td>' + esc(e.n) + '</td><td class="pts">' + e.p + ' נק׳</td><td class="ans">' + e.a + ' תשובות נכונות</td></tr>';
+    }).join('');
+    return '<div class="card sum"><h2>📊 סיכום ' + (b.games || '') + ' משחקים</h2>' +
+      (rows ? '<table>' + rows + '</table>' : '<div class="cat">אף אחד עוד לא צבר נקודות.</div>') +
+      '<div class="ask">' + (b.continueAt ? 'ממשיכים בעוד <b id="cont"></b>' : 'המודים מחליטים: <b>להמשיך</b> או <b>לעצור</b>') + '</div></div>';
+  }
+
+  function fmt(ms) {
+    var t = Math.max(0, Math.ceil(ms / 1000));
+    return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
   }
 
   var lastHtml = '';
@@ -165,9 +189,10 @@
     var r = state.round;
     var main;
     if (!state.enabled) main = '<div class="card idle"><h2>משחקי הצ׳אט כבויים</h2></div>';
+    else if (state.brk) main = summaryCard(state);
     else if (!r) main = '<div class="card idle"><h2>🎲 משחקי צ׳אט</h2><p>איש תלוי, חידות, טריוויה ועוד. המשחק הבא מתחיל בקרוב, תהיו בצ׳אט!' + (state.auto ? '' : ' (המודים מפעילים)') + '</p></div>';
     else {
-      main = '<div class="card"><div class="head"><h2 class="title">🎲 ' + esc(r.title) + '</h2><span class="cat">' + (r.cat ? esc(r.cat) : '') + '</span></div>' +
+      main = '<div class="card"><div class="head"><h2 class="title">🎲 ' + esc(r.title) + '</h2><span class="cat">' + (r.cat ? esc(r.cat) + ' · ' : '') + (state.series && state.series.games > 0 ? 'משחק ' + Math.min(state.series.games, state.series.done + (r.status === 'running' ? 1 : 0)) + ' מתוך ' + state.series.games + ' · ' : '') + '<span class="left" id="left"></span></span></div>' +
         (r.status === 'running' ? '<div class="bar" id="bar"><i style="width:' + timerPct(r) + '%"></i></div>' : '') + body(r) + result(r) + '</div>';
     }
     var html = '<div class="wrap">' + main + (SHOW_BOARD ? board(state) : '') + '</div>' +
@@ -178,6 +203,12 @@
 
   // the timer bar keeps moving between polls
   setInterval(function () {
+    if (!state) return;
+    var now = Date.now() + skew;
+    var left = document.getElementById('left');
+    if (left && state.round) left.textContent = state.round.status === 'running' ? '⏱ ' + fmt(state.round.endsAt - now) : '';
+    var cont = document.getElementById('cont');
+    if (cont && state.brk && state.brk.continueAt) cont.textContent = fmt(state.brk.continueAt - now);
     var bar = document.getElementById('bar');
     if (!bar || !state || !state.round) return;
     var pct = timerPct(state.round);
