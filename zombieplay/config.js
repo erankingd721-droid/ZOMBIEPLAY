@@ -73,6 +73,34 @@ window.SITE_CONFIG = {
     // { title: "100 צפיות בלייב", current: 64, target: 100, reward: "לייב 24 שעות" },
   ],
 
+  // יעדי הלייב מהבוט (KickGuard). מופיעים בכרטיס "מטרות קהילה" רק בזמן לייב, כשהבוט רץ במחשב.
+  // הכתובת: ה-Webhook URL מלוח הבקרה של הבוט, עם /public/goals במקום /webhook.
+  botGoals: {
+    url: "https://dayroom-pope-reseller.ngrok-free.dev/public/goals",
+    everySeconds: 30,
+  },
+
+  // אזור מודים ומנהל (mod.html). הקודים נמצאים בלוח הבקרה של הבוט ולא כאן.
+  // url: אותה כתובת ngrok, עם /mod בסוף.
+  modArea: {
+    url: "https://dayroom-pope-reseller.ngrok-free.dev/mod",
+    // חוקי הערוץ למודים, שורה לכל חוק. ריק = הקטע לא מופיע.
+    rules: [
+    ],
+    commands: [
+      { cmd: "!guard status", text: "מצב ההגנה מבוטים" },
+      { cmd: "!guard lock / unlock", text: "נעילה ידנית נגד פשיטת פולואו-בוטים, וביטולה" },
+      { cmd: "!guard undo", text: "ביטול הבאנים מהפשיטה האחרונה (אם הבוט טעה)" },
+      { cmd: "!יעדים  /  !goals", text: "התקדמות היעדים של הלייב (לכולם)" },
+      { cmd: "!זמן", text: "כמה זמן בלייב (לכולם)" },
+      { cmd: "!goals report", text: "שליחת עדכון יעדים מלא לצ׳אט" },
+      { cmd: "!goals end", text: "סיכום סוף לייב בשני הצ׳אטים, לפני שמסיימים" },
+    ],
+    // טיפים חופשיים למודים
+    notes: [
+    ],
+  },
+
   // לוח שידורים (אופציונלי). אם ריק, הכרטיס לא מופיע.
   schedule: [
     // { day: "חמישי", time: "20:00", title: "מיינקראפט עם הצ׳אט" },
