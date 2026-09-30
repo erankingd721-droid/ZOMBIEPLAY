@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0d0f0d">
+  <title>לצייר | ZombiePlay</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Rubik:ital,wght@0,400..900;1,700..900&display=swap">
+  <link rel="preload" href="assets/fonts/burbank-big-condensed-black.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js"></script>
+  <script src="assets/js/draw.js" defer></script>
+  <style>
+    .d-top { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; }
+    .d-top a { color:var(--dim); font-size:14px; text-decoration:none; }
+    .d-title { margin:0 0 6px; font-size:clamp(40px,7vw,72px); line-height:1; }
+    .d-wrap { padding:8px 0 70px; max-width:980px; margin:0 auto; }
+    .d-card { margin-top:20px; padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--ink-2); }
+    .d-card h2 { margin:0 0 10px; font-size:22px; }
+    .d-card input[type=text] { width:100%; min-height:52px; padding:0 16px; border:1px solid rgba(255,255,255,.22); border-radius:12px; background:var(--ink); color:var(--text); font:inherit; font-size:18px; direction:ltr; text-align:center; }
+    .d-card .btn { margin-top:12px; width:100%; }
+    .d-code { margin:14px 0; padding:18px; border:2px dashed var(--accent); border-radius:16px; text-align:center; font-size:clamp(48px,14vw,84px); font-weight:900; letter-spacing:.12em; color:var(--accent); direction:ltr; }
+    .d-msg { min-height:1.4em; margin:10px 0 0; font-size:14px; color:var(--live); }
+    .d-word { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:12px; }
+    .d-word b { font-size:clamp(34px,8vw,56px); color:var(--accent); }
+    .d-time { font-size:22px; font-weight:800; direction:ltr; }
+    #board { display:block; width:100%; height:auto; aspect-ratio:10/7; border-radius:14px; background:#f7f9f3; touch-action:none; cursor:crosshair; }
+    .d-tools { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:12px; }
+    .d-color { width:38px; height:38px; border-radius:50%; border:3px solid transparent; cursor:pointer; padding:0; }
+    .d-color.on { border-color:#fff; box-shadow:0 0 0 2px var(--accent); }
+    .d-size { min-width:46px; height:38px; border:1px solid var(--line); border-radius:10px; background:var(--ink); color:var(--text); cursor:pointer; font:inherit; }
+    .d-size.on { border-color:var(--accent); color:var(--accent); }
+    .d-tool { height:38px; padding:0 14px; border:1px solid var(--line); border-radius:10px; background:var(--ink); color:var(--text); cursor:pointer; font:inherit; }
+    .d-note { margin-top:10px; font-size:13px; color:var(--dim); }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="d-top">
+      <a href="./">→ חזרה לאתר</a>
+      <span class="brand__word"><span>ZOMBIE</span><b>PLAY</b></span>
+    </div>
+
+    <main class="d-wrap">
+      <p class="eyebrow">DRAW</p>
+      <h1 class="d-title display">לצייר</h1>
+      <p class="muted">הדף של הצופה שנבחר לצייר במשחק "נחש את הציור". מי שלא נבחר לא יכול להיכנס.</p>
+
+      <section class="d-card" id="stepName">
+        <h2>נבחרת לצייר? 🎨</h2>
+        <p class="muted" style="margin-bottom:12px">כתבו את שם המשתמש שלכם ב-Kick, בדיוק כמו בצ׳אט.</p>
+        <form id="nameForm" autocomplete="off">
+          <input type="text" id="nameInput" maxlength="40" placeholder="kick username" required>
+          <button class="btn btn--primary" type="submit">המשך</button>
+        </form>
+        <p class="d-msg" id="nameMsg" role="alert"></p>
+      </section>
+
+      <section class="d-card" id="stepCode" hidden>
+        <h2>עוד צעד: אימות ✅</h2>
+        <p class="muted">כדי שהמילה תגיע רק אליכם, כתבו <b>בצ׳אט של Kick</b> (מהחשבון שלכם) את הקוד הזה:</p>
+        <div class="d-code" id="codeBox">0000</div>
+        <p class="muted" id="codeWait">מחכה לקוד בצ׳אט…</p>
+        <p class="d-note">אם לא נבחרתם, או שעבר הזמן, הדף יציג את זה לבד.</p>
+      </section>
+
+      <section class="d-card" id="stepDraw" hidden>
+        <div class="d-word">
+          <div><span class="muted">המילה שלכם לצייר:</span><br><b id="wordBox">—</b> <span class="muted" id="catBox"></span></div>
+          <div class="d-time" id="timeBox">0:00</div>
+        </div>
+        <canvas id="board" width="1000" height="700"></canvas>
+        <div class="d-tools">
+          <span id="colors" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+          <span id="sizes" style="display:flex;gap:6px"></span>
+          <button class="d-tool" id="undoBtn" type="button">↩️ בטל</button>
+          <button class="d-tool" id="clearBtn" type="button">🧽 נקה</button>
+        </div>
+        <p class="d-note">הצופים מנחשים בצ׳אט ורואים את הציור בשידור. אסור לכתוב את המילה בציור או בצ׳אט.</p>
+        <p class="d-msg" id="drawMsg" role="status"></p>
+      </section>
+
+      <section class="d-card" id="stepEnd" hidden>
+        <h2 id="endTitle">הסיבוב נגמר</h2>
+        <p class="muted" id="endText"></p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
