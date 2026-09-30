@@ -192,7 +192,10 @@
 
   // ─── משחקי צ׳אט ─────────────────────────────────────────────────────
   var CG_TYPES = { hangman: '🪢 איש תלוי', riddle: '🧩 חידה', trivia: '🧠 טריוויה', scramble: '🔤 ערבוביה', math: '➗ חשבון', number: '🔢 ניחוש מספר' };
-  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד', 'cg-off': '⏻ כבה את המשחקים', 'cg-on': '⏻ הפעל את המשחקים' };
+  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד', };
+  var EYE_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.1-5.9M9.9 4.2A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>';
+  var cgOff = false;
   CONFIRM['cg-reset'] = 'לאפס את כל טבלאות הניקוד, גם של כל הזמנים?';
 
   function renderCg(d) {
@@ -205,15 +208,20 @@
       sbox.dataset.sig = start.join(',');
       sbox.innerHTML = start.map(function (t) { return '<button class="btn btn--ghost btn--sm" type="button" data-t="' + t + '">' + CG_TYPES[t] + '</button>'; }).join('');
     }
-    var other = acts.filter(function (a) { if (!CG_LABELS[a]) return false;
-      if (c.off) return a === 'cg-on';
-      return a === 'cg-on' ? false : a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true; });
+    var eye = $('#cgEye');
+    cgOff = !!c.off;
+    eye.hidden = acts.indexOf('cg-off') < 0;
+    eye.className = 'mod-eye' + (cgOff ? ' off' : '');
+    eye.innerHTML = cgOff ? EYE_OFF : EYE_ON;
+    eye.title = eye.ariaLabel = cgOff ? 'המשחקים מוסתרים. לחיצה מחזירה אותם' : 'המשחקים מוצגים. לחיצה מסתירה ומכבה אותם';
+    var other = cgOff ? [] : acts.filter(function (a) { return CG_LABELS[a] && (a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true); });
     var abox = $('#cgActions');
     if (abox.dataset.sig !== other.join(',')) {
       abox.dataset.sig = other.join(',');
       abox.innerHTML = other.map(function (a) { return '<button class="btn btn--ghost btn--sm" type="button" data-a="' + a + '">' + CG_LABELS[a] + '</button>'; }).join('');
     }
   }
+  $('#cgEye').addEventListener('click', function () { send(cgOff ? 'cg-on' : 'cg-off', '', $('#cgMsg')); });
   $('#cgStart').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-t]');
     if (b) send('cg-start', b.dataset.t, $('#cgMsg'));
