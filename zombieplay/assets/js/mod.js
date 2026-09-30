@@ -135,6 +135,7 @@
 
     renderActions(d.actions || [], g.enabled);
     renderGame(d);
+    renderCg(d);
     var rec = d.recent || [];
     $('#recent').innerHTML = rec.length
       ? rec.map(function (r) {
@@ -160,7 +161,7 @@
   };
 
   function renderActions(allowed, enabled) {
-    var list = allowed.filter(function (a) { return a.indexOf('game-') === 0 ? false : a === 'off' ? enabled !== false : a === 'on' ? enabled === false : true; });
+    var list = allowed.filter(function (a) { return a.indexOf('game-') === 0 || a.indexOf('cg-') === 0 ? false : a === 'off' ? enabled !== false : a === 'on' ? enabled === false : true; });
     var box = $('#actions');
     var sig = list.join(',');
     if (box.dataset.sig === sig) return;
@@ -187,6 +188,37 @@
   $('#actions').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-a]');
     if (b) send(b.dataset.a, '', $('#actionMsg'));
+  });
+
+  // ─── משחקי צ׳אט ─────────────────────────────────────────────────────
+  var CG_TYPES = { hangman: '🪢 איש תלוי', riddle: '🧩 חידה', trivia: '🧠 טריוויה', scramble: '🔤 ערבוביה', math: '➗ חשבון', number: '🔢 ניחוש מספר' };
+  var CG_LABELS = { 'cg-skip': '⏭️ דלג', 'cg-stop': '🛑 עצור', 'cg-auto-on': '🔁 הפעל אוטומטי', 'cg-auto-off': '⏹️ כבה אוטומטי', 'cg-reset': '🧹 אפס ניקוד' };
+  CONFIRM['cg-reset'] = 'לאפס את כל טבלאות הניקוד, גם של כל הזמנים?';
+
+  function renderCg(d) {
+    var c = d.chatGames || {};
+    var acts = d.actions || [];
+    $('#cgLine').textContent = c.enabled === false ? 'משחקי הצ׳אט כבויים ב-config.js.' : (c.running ? 'רץ עכשיו: ' + c.running : 'אין משחק רץ.') + (c.auto ? ' · מצב אוטומטי פועל' : '') + ' · ' + (c.players || 0) + ' שחקנים הערב';
+    var start = acts.indexOf('cg-start') >= 0 ? Object.keys(CG_TYPES) : [];
+    var sbox = $('#cgStart');
+    if (sbox.dataset.sig !== start.join(',')) {
+      sbox.dataset.sig = start.join(',');
+      sbox.innerHTML = start.map(function (t) { return '<button class="btn btn--ghost btn--sm" type="button" data-t="' + t + '">' + CG_TYPES[t] + '</button>'; }).join('');
+    }
+    var other = acts.filter(function (a) { return CG_LABELS[a] && (a === 'cg-auto-on' ? !c.auto : a === 'cg-auto-off' ? !!c.auto : true); });
+    var abox = $('#cgActions');
+    if (abox.dataset.sig !== other.join(',')) {
+      abox.dataset.sig = other.join(',');
+      abox.innerHTML = other.map(function (a) { return '<button class="btn btn--ghost btn--sm" type="button" data-a="' + a + '">' + CG_LABELS[a] + '</button>'; }).join('');
+    }
+  }
+  $('#cgStart').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-t]');
+    if (b) send('cg-start', b.dataset.t, $('#cgMsg'));
+  });
+  $('#cgActions').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]');
+    if (b) send(b.dataset.a, '', $('#cgMsg'));
   });
 
   // ─── פארק הזומבים ──────────────────────────────────────────────────
