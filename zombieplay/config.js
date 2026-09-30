@@ -133,7 +133,7 @@ window.SITE_CONFIG = {
   images: {
     avatar: "https://yt3.googleusercontent.com/sysvsqHoWWCxCr86CSvAauorkUeVwqX8ei6Av-Cd4vxG-5XbQrVbgq34wlHcJzoCRTAHv211QA=s240-c-k-c0x00ffffff-no-rj",
     banner: "https://yt3.googleusercontent.com/8PMoTGueMUuCJEslA-qpirSLjiy2KFg34nGuOW9MyUqApicU-Kv9v0uOFOQbNHJsMdL4YVOl=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-    about: "assets/img/stickers/01_happy_love.png",
+    about: "assets/img/about-zombie.png",   // הסטיקר המאוהב בלי המסגרת הלבנה ועם היד המתוקנת
   },
 
   // הסטיקרים של הזומבי (שם הקובץ בתיקייה assets/img/stickers + שם באנגלית)
