@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>גלגל הזומבי | ZombiePlay</title>
+  <meta name="description" content="זומבי הארדקור במיינקראפט: בכל 10 סאבים בלייב גלגל הזומבי מסתובב ובוחר משימה שאני חייב לבצע. כל המשימות, ואפשר לסובב בעצמכם.">
+  <meta name="theme-color" content="#0d0f0d">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Rubik:ital,wght@0,400..900;1,700..900&display=swap">
+  <link rel="preload" href="assets/fonts/burbank-big-condensed-black.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="config.js"></script>
+  <style>
+    .g-top { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; }
+    .g-top a { color:var(--dim); font-size:14px; text-decoration:none; }
+    .g-top a:hover { color:var(--accent); }
+    .g-title { margin:0 0 6px; font-size:clamp(40px,7vw,72px); line-height:1; }
+    .g-wrap { padding:8px 0 80px; }
+    [hidden] { display:none !important; }
+
+    .w-main { display:grid; gap:28px; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:start; margin-top:26px; }
+    @media (max-width: 860px) { .w-main { grid-template-columns:1fr; } }
+    .w-wheel { display:flex; flex-direction:column; align-items:center; gap:16px; }
+    #wCanvas { width:min(100%,560px); aspect-ratio:1; display:block; filter:drop-shadow(6px 6px 0 rgba(0,0,0,.5)); }
+    #wSpin { font:800 26px var(--font); color:#fff; text-shadow:3px 3px 0 #2a2a2a; background:#5d9b3a; border:4px solid #000; padding:12px 44px; cursor:pointer;
+      box-shadow:inset 4px 4px 0 #8fd16a, inset -4px -4px 0 #2e5a1a; }
+    #wSpin:hover:not(:disabled) { background:#6fb446; }
+    #wSpin:disabled { opacity:.6; cursor:wait; }
+    .w-result { width:min(100%,560px); display:flex; gap:14px; align-items:flex-start; padding:16px 18px; background:#c6c6c6; border:4px solid #000;
+      box-shadow:inset 4px 4px 0 #fff, inset -4px -4px 0 #555; color:#3f3f3f; }
+    .w-result .w-sw { width:30px; height:30px; margin-top:4px; }
+    .w-result b { display:block; font-size:28px; color:#3f3f15; }
+    .w-result p { margin:4px 0 0; font-weight:600; }
+    .w-result small { display:block; margin-top:6px; font-weight:800; font-size:15px; }
+
+    .g-card { padding:20px; border:1px solid var(--line); border-radius:18px; background:var(--ink-2); }
+    .g-card h2 { margin:0 0 12px; font-size:22px; color:var(--accent); }
+    .w-steps { margin:0; padding:0; list-style:none; display:grid; gap:12px; counter-reset:s; }
+    .w-steps li { display:flex; gap:12px; align-items:flex-start; font-size:16px; line-height:1.5; }
+    .w-steps li::before { counter-increment:s; content:counter(s); flex:none; width:30px; height:30px; display:grid; place-items:center;
+      background:var(--accent); color:var(--on-accent); font-weight:800; border-radius:8px; }
+    .w-note { margin:14px 0 0; color:var(--dim); font-size:14px; }
+
+    .w-list-head { margin:44px 0 14px; font-size:clamp(30px,5vw,46px); line-height:1; }
+    .w-tasks { margin:0; padding:0; list-style:none; display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr)); }
+    .w-task { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border:1px solid var(--line); border-radius:14px; background:var(--ink-2); }
+    .w-task b { font-size:18px; }
+    .w-task p { margin:3px 0 0; color:var(--dim); font-size:14px; line-height:1.45; }
+    .w-task div { flex:1; min-width:0; }
+    .w-sw { flex:none; width:22px; height:22px; border:3px solid #000; margin-top:2px; }
+    .w-time { flex:none; font-size:13px; font-weight:700; color:var(--accent); white-space:nowrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="g-top">
+      <a href="./">→ חזרה לאתר</a>
+      <span class="brand__word"><span>ZOMBIE</span><b>PLAY</b></span>
+    </div>
+
+    <main class="g-wrap">
+      <p class="eyebrow">ZOMBIE HARDCORE</p>
+      <h1 class="g-title display nochrome">גלגל הזומבי</h1>
+      <p class="muted nochrome">סדרת הלייבים <b>זומבי הארדקור</b> במיינקראפט: חיים אחד, בלי הזדמנות שנייה. ואתם מחליטים כמה קשה זה יהיה.</p>
+
+      <div class="w-main">
+        <div class="w-wheel">
+          <canvas id="wCanvas" width="1000" height="1000" aria-label="גלגל המשימות"></canvas>
+          <button id="wSpin" type="button">סובבו!</button>
+          <div class="w-result" id="wResult" hidden aria-live="polite">
+            <span class="w-sw" id="wResSw"></span>
+            <div><b id="wResTitle"></b><p id="wResText"></p><small id="wResTime"></small></div>
+          </div>
+        </div>
+
+        <section class="g-card">
+          <h2>🎡 איך זה עובד בלייב</h2>
+          <ol class="w-steps">
+            <li><span>כל סאב בלייב ב-Kick ממלא את הפס על המסך.</span></li>
+            <li><span>כל <b>10 סאבים</b> הגלגל קופץ על המסך ומסתובב.</span></li>
+            <li><span>מה שיוצא, אני חייב לעשות באותו רגע במשחק. משימות עם זמן מקבלות טיימר על המסך.</span></li>
+            <li><span>גיפט סאבים נספרים גם הם: 10 גיפטים = סיבוב מיד.</span></li>
+          </ol>
+          <p class="w-note">כאן באתר אפשר לסובב סתם בשביל הכיף ולראות מה הייתי מקבל. רק סיבוב בלייב נחשב 😈</p>
+        </section>
+      </div>
+
+      <h2 class="w-list-head display">כל המשימות בגלגל</h2>
+      <ul class="w-tasks" id="wTasks"></ul>
+    </main>
+  </div>
+  <script src="assets/js/wheel.js"></script>
+</body>
+</html>
