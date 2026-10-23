@@ -119,3 +119,69 @@ textarea { font-family: var(--fn-ui); }
 .loader__word b { font-weight: 400; color: var(--accent); }
 @keyframes loader-spin { to { transform: rotate(360deg); } }
 @keyframes loader-pulse { 50% { transform: scale(.95); } }
+
+
+/* ─── משחקי צופים (index.html #play) ─── */
+.play {
+  border-top: 1px solid var(--line);
+  background:
+    radial-gradient(60% 50% at 10% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    var(--ink);
+}
+.play-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+@media (max-width: 900px) { .play-grid { grid-template-columns: minmax(0, 1fr); } }
+.play-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: clamp(20px, 2.2vw, 26px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--ink-2), #111411);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform .2s ease, border-color .2s;
+}
+.play-card:hover { transform: translateY(-4px); border-color: var(--accent-line); }
+.play-card__top { display: flex; align-items: center; gap: 12px; }
+.play-card__status { white-space: nowrap; max-width: 70%; overflow: hidden; text-overflow: ellipsis; }
+.play-card__status.is-on { background: var(--accent-soft); color: var(--accent); }
+.play-card__status.is-on::before { animation: play-pulse 1.4s infinite; }
+@keyframes play-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent); }
+  100% { box-shadow: 0 0 0 8px transparent; }
+}
+.play-card__title { margin: 4px 0 0; font-size: 24px; font-weight: 800; line-height: 1.15; }
+.play-card__text { margin: 0; font-size: 15px; color: var(--dim); text-wrap: pretty; }
+.play-card__how { display: flex; flex-wrap: wrap; gap: 8px; }
+.play-chip {
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ink-3);
+  color: var(--text);
+  font-family: var(--fn-ui);
+  font-size: 15px;
+  letter-spacing: .03em;
+}
+.play-card .link-arrow { margin-top: auto; padding-top: 4px; }
+
+.play-board { display: grid; gap: 6px; margin: 0; padding: 12px; list-style: none; border-radius: 12px; background: var(--ink-3); }
+.play-board li { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 15px; }
+.play-board bdi { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.play-board b { font-family: var(--fn); font-size: 20px; font-weight: 400; color: var(--accent); font-variant-numeric: tabular-nums; }
+.play-board__rank { width: 22px; font-family: var(--fn); font-size: 18px; color: var(--gold); text-align: center; }
+.play-board li:nth-child(2) .play-board__rank { color: var(--silver); }
+.play-board li:nth-child(3) .play-board__rank { color: var(--bronze); }
+
+@media (prefers-reduced-motion: reduce) {
+  .play-card, .play-card:hover { transition: none; transform: none; }
+  .play-card__status.is-on::before { animation: none; }
+}
