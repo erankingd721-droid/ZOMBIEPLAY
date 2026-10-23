@@ -28,6 +28,8 @@
   <script src="data/youtube.js"></script>
   <script src="assets/js/app.js" defer></script>
   <script src="assets/js/bot-goals.js" defer></script>
+  <script src="assets/js/play.js" defer></script>
+  <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 
@@ -121,7 +123,7 @@
       <a href="#links">לינקים</a>
       <a href="#community">הקהילה</a>
       <a href="#stickers">סטיקרים</a>
-      <a href="wheel.html">גלגל הזומבי</a>
+      <a href="#play">משחקים</a>
     </nav>
 
     <div class="nav__cta">
@@ -358,11 +360,60 @@
     </div>
   </section>
 
+  <!-- ============ משחקי צופים: הגלגל, משחקי הצ'אט והפארק. המצב החי מגיע מהבוט (assets/js/play.js) ============ -->
+  <section class="section play" id="play">
+    <div class="container">
+      <header class="section-head section-head--bar">
+        <div>
+          <p class="eyebrow">05 / PLAY</p>
+          <h2 class="display">משחקי צופים</h2>
+          <p class="lead">בלייבים הצ׳אט לא רק מדבר, הוא משחק. ככה מצטרפים.</p>
+        </div>
+      </header>
+
+      <div class="play-grid">
+        <a class="play-card" href="wheel.html" id="playWheel">
+          <span class="play-card__top">
+            <span class="card__icon"><svg class="icon"><use href="#i-spark"/></svg></span>
+            <span class="status play-card__status">פתוח תמיד</span>
+          </span>
+          <h3 class="play-card__title">גלגל הזומבי</h3>
+          <p class="play-card__text">בכל 10 סאבים בלייב הגלגל מסתובב ובוחר משימה שאני חייב לבצע בהארדקור. אפשר גם לסובב בעצמכם.</p>
+          <span class="play-card__how"><span class="play-chip">10 סאבים = סיבוב</span></span>
+          <span class="link-arrow">לגלגל <svg class="icon"><use href="#i-arrow"/></svg></span>
+        </a>
+
+        <a class="play-card" href="games.html" id="playChat">
+          <span class="play-card__top">
+            <span class="card__icon"><svg class="icon"><use href="#i-chat"/></svg></span>
+            <span class="status play-card__status" id="playChatStatus">בלייבים</span>
+          </span>
+          <h3 class="play-card__title">משחקי צ׳אט</h3>
+          <p class="play-card__text">איש תלוי, חידות, טריוויה, נחש את הציור ועוד. עונים בצ׳אט של Kick וצוברים נקודות.</p>
+          <span class="play-card__how"><code class="play-chip" dir="rtl">!נקודות</code><code class="play-chip" dir="rtl">!טבלה</code></span>
+          <ol class="play-board" id="playBoard" hidden></ol>
+          <span class="link-arrow">למשחקים <svg class="icon"><use href="#i-arrow"/></svg></span>
+        </a>
+
+        <a class="play-card" href="game.html" id="playPark">
+          <span class="play-card__top">
+            <span class="card__icon"><svg class="icon"><use href="#i-gamepad"/></svg></span>
+            <span class="status play-card__status" id="playParkStatus">בלייבים</span>
+          </span>
+          <h3 class="play-card__title">פארק הזומבים</h3>
+          <p class="play-card__text">כותבים בצ׳אט והזומבי שלכם נכנס לפארק: מגלשת קברים, בריכת רעל, ריקודים וקרבות עם זומבים אחרים.</p>
+          <span class="play-card__how"><code class="play-chip" dir="ltr">visit!</code><code class="play-chip" dir="ltr">dance!</code><code class="play-chip" dir="ltr">slide!</code></span>
+          <span class="link-arrow">לפארק <svg class="icon"><use href="#i-arrow"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ עוזרים לערוץ + סטיקרים ============ -->
   <section class="section support" id="stickers">
     <div class="container support__grid">
       <div class="support__intro">
-        <p class="eyebrow">05 / SUPPORT</p>
+        <p class="eyebrow">06 / SUPPORT</p>
         <h2 class="display" id="supportTitle"></h2>
         <p class="lead" id="supportText"></p>
         <div class="support__ctas">
