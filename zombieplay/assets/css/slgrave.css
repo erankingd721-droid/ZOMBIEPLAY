@@ -1,0 +1,52 @@
+/* =====================================================================
+   קבר הסאב והלייק (סקשן #slGrave): אותו קבר כמו של הדיסקורד (dgrave.css), עם אגודל של לייק,
+   פעמון וכפתור הרשמה אדום. לחיצה אחת: הכפתור נהיה אפור, הלייק כחול והפעמון צהוב ומצלצל.
+   ===================================================================== */
+
+/* שני סקשנים בהירים ברצף: בלי קרע ביניהם וקצת פחות רווח */
+#slWrap:not([hidden]) + #dgWrap > .tear:first-child { display: none; }
+#slWrap:not([hidden]) + #dgWrap .dgrave { padding-top: clamp(28px, 5vw, 56px); }
+#slWrap:not([hidden]) .dgrave { padding-bottom: 0; }
+
+.dg--yt .dg__badge { background: #3b3b3b; transition: background .14s linear; }
+.dg--yt .dg__badge svg { display: block; width: calc(var(--u) * 66); height: calc(var(--u) * 66); }
+.dg--yt .dg__btn { background: #f01919; }
+.dg--yt .dg__btn::before { background: #4d4d4d; }
+.dg--yt .dg__ripple { background: #f01919; }
+
+.dg__bell {
+  left: calc(var(--u) * 368); top: calc(var(--u) * 148);
+  width: calc(var(--u) * 84); height: calc(var(--u) * 84);
+  box-sizing: border-box; border: calc(var(--u) * 6) solid #0d0d0d; border-radius: 50%;
+  background: #3b3b3b; box-shadow: 0 calc(var(--u) * 9) 0 #0d0d0d;
+  display: flex; align-items: center; justify-content: center;
+}
+.dg__bell > svg { position: absolute; width: calc(var(--u) * 48); height: calc(var(--u) * 48); transform-origin: 50% 12%; }
+.dg__bell .by { opacity: 0; }
+.dg__bell i {
+  position: absolute; right: calc(var(--u) * -10); top: calc(var(--u) * -12);
+  width: calc(var(--u) * 34); height: calc(var(--u) * 34); box-sizing: border-box;
+  border: calc(var(--u) * 5) solid #0d0d0d; border-radius: 50%; background: #ff2d2d; color: #fff;
+  font: 900 calc(var(--u) * 20) / 1 var(--font); font-style: normal;
+  display: flex; align-items: center; justify-content: center; transform: scale(0);
+}
+
+.dg--yt.is-done .dg__badge { background: #2b8cf4; }
+.dg--yt.is-done .dg__badge svg { animation: dg-wiggle .75s cubic-bezier(.3, 1.6, .5, 1); }
+.dg--yt.is-done .dg__bell .bw { opacity: 0; }
+.dg--yt.is-done .dg__bell .by { opacity: 1; }
+.dg--yt.is-done .dg__bell > svg { animation: dg-ring .9s ease-in-out; }
+.dg--yt.is-done .dg__bell i { transform: scale(1); animation: dg-pop .35s .25s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+
+.js .dg--yt:not(.is-in) .dg__bell { transform: scale(0); }
+.dg--yt.is-in .dg__bell { animation: dg-pop .45s .82s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+
+@keyframes dg-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(30deg); } 30% { transform: rotate(-26deg); } 45% { transform: rotate(20deg); }
+  60% { transform: rotate(-14deg); } 75% { transform: rotate(8deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .dg--yt:not(.is-in) .dg__bell { transform: none; }
+  .dg--yt.is-in .dg__bell, .dg--yt.is-done .dg__badge svg, .dg--yt.is-done .dg__bell > svg, .dg--yt.is-done .dg__bell i { animation: none; }
+}
