@@ -1,0 +1,107 @@
+/* =====================================================================
+   קבר הדיסקורד: קבר אחד צומח מהאדמה, עליו הלוגו של דיסקורד וכפתור הצטרפות.
+   כל המידות מצוירות על לוח של 600x560 ומוכפלות ב-var(--u) (נקבע ב-dgrave.js לפי רוחב הבמה).
+   ===================================================================== */
+
+.dgrave { overflow: hidden; }
+.dgrave__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+.dgrave__copy .btn { margin-top: 8px; }
+.dgrave__live {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 14px 0 0; font-weight: 700; color: var(--paper-text);
+}
+.dgrave__live i {
+  width: 9px; height: 9px; border-radius: 50%; background: #23a55a;
+  box-shadow: 0 0 0 4px rgba(35, 165, 90, .22);
+}
+.dgrave__live[hidden] { display: none; }
+
+.dgrave__stage {
+  position: relative; width: 100%; max-width: 600px; margin-inline: auto;
+  aspect-ratio: 600 / 560; --u: 0.8px; direction: ltr;
+}
+.dg { position: absolute; inset: 0; }
+.dg > * { position: absolute; }
+
+.dg__stone {
+  left: calc(var(--u) * 115); top: calc(var(--u) * 48);
+  width: calc(var(--u) * 370); height: calc(var(--u) * 470);
+  transform-origin: calc(var(--u) * 185) calc(var(--u) * 452);
+  pointer-events: none; user-select: none;
+}
+.dg__mound {
+  left: calc(var(--u) * 2.4); top: calc(var(--u) * 480);
+  width: calc(var(--u) * 595); height: calc(var(--u) * 87);
+  transform-origin: 50% 90%; pointer-events: none; user-select: none;
+}
+.dg__badge {
+  left: calc(var(--u) * 230); top: calc(var(--u) * 183);
+  width: calc(var(--u) * 140); height: calc(var(--u) * 140);
+  box-sizing: border-box; border: calc(var(--u) * 8) solid #0d0d0d; border-radius: 50%;
+  background: #5865f2; box-shadow: 0 calc(var(--u) * 13) 0 #0d0d0d;
+  display: flex; align-items: center; justify-content: center;
+}
+.dg__badge img { display: block; width: calc(var(--u) * 84); height: auto; }
+
+.dg__btn {
+  left: calc(var(--u) * 177); top: calc(var(--u) * 332);
+  width: calc(var(--u) * 246); height: calc(var(--u) * 132);
+  box-sizing: border-box; border: calc(var(--u) * 8) solid #0d0d0d; border-radius: 999px;
+  background: #5865f2; box-shadow: 0 calc(var(--u) * 13) 0 #0d0d0d; overflow: hidden;
+  color: #fff; text-decoration: none; cursor: pointer;
+  font: 900 calc(var(--u) * 50) / 1 var(--font);
+  display: flex; align-items: center; justify-content: center; direction: rtl;
+  -webkit-tap-highlight-color: transparent;
+}
+.dg__btn::before { content: ""; position: absolute; inset: 0; background: #23a55a; opacity: 0; transition: opacity .14s linear; }
+.dg__btn::after {
+  content: ""; position: absolute; left: calc(var(--u) * 22); right: calc(var(--u) * 22); top: calc(var(--u) * 12);
+  height: calc(var(--u) * 26); border-radius: calc(var(--u) * 13); background: rgba(255, 255, 255, .17);
+}
+.dg__btn span { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: calc(var(--u) * 10); white-space: nowrap; }
+.dg__btn .b { position: absolute; inset: 0; opacity: 0; font-size: .84em; }
+.dg__btn .b svg { width: calc(var(--u) * 38); height: calc(var(--u) * 38); }
+.dg__btn:hover { filter: brightness(1.08); }
+.dg__btn:active { transform: scale(.93); }
+.dg__btn:focus-visible { outline: 3px solid var(--accent-ink, #5865f2); outline-offset: 4px; }
+
+.dg.is-done .dg__btn::before { opacity: 1; }
+.dg.is-done .dg__btn .a { opacity: 0; }
+.dg.is-done .dg__btn .b { opacity: 1; }
+.dg.is-done .dg__badge img { animation: dg-wiggle .75s cubic-bezier(.3, 1.6, .5, 1); }
+
+.dg__soil, .dg__spark { left: 50%; top: calc(var(--u) * 500); opacity: 0; pointer-events: none; }
+.dg__ripple {
+  left: calc(var(--u) * 235); top: calc(var(--u) * 333); width: calc(var(--u) * 130); height: calc(var(--u) * 130);
+  border-radius: 50%; background: #23a55a; opacity: 0; pointer-events: none;
+}
+
+/* ---- the entrance: only when JS is on and until the section scrolls into view ---- */
+.js .dg:not(.is-in) .dg__stone { transform: scale(.8, 0); }
+.js .dg:not(.is-in) .dg__mound { transform: scale(.67, 0); }
+.js .dg:not(.is-in) .dg__badge,
+.js .dg:not(.is-in) .dg__btn { transform: scale(0); }
+.dg.is-in .dg__mound { animation: dg-rise .35s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+.dg.is-in .dg__stone { animation: dg-rise .55s .3s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+.dg.is-in .dg__badge { animation: dg-pop .45s .75s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+.dg.is-in .dg__btn { animation: dg-pop .45s .9s cubic-bezier(.34, 1.56, .64, 1) backwards; }
+.dg.is-shake .dg__stone { animation: dg-shake .5s ease-in-out; }
+
+@keyframes dg-rise { from { transform: scale(.8, 0); } }
+@keyframes dg-pop { from { transform: scale(0); } }
+@keyframes dg-wiggle { 0% { transform: scale(1) rotate(0); } 25% { transform: scale(1.25) rotate(-14deg); } 100% { transform: scale(1) rotate(0); } }
+@keyframes dg-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(calc(var(--u) * -6)); } 40% { transform: translateX(calc(var(--u) * 6)); } 60% { transform: translateX(calc(var(--u) * -4)); } 80% { transform: translateX(calc(var(--u) * 3)); } }
+
+@media (max-width: 820px) {
+  .dgrave__grid { grid-template-columns: minmax(0, 1fr); }
+  .dgrave__stage { max-width: 440px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .dg:not(.is-in) .dg__stone, .js .dg:not(.is-in) .dg__mound, .js .dg:not(.is-in) .dg__badge, .js .dg:not(.is-in) .dg__btn { transform: none; }
+  .dg.is-in .dg__mound, .dg.is-in .dg__stone, .dg.is-in .dg__badge, .dg.is-in .dg__btn, .dg.is-done .dg__badge img, .dg.is-shake .dg__stone { animation: none; }
+}
