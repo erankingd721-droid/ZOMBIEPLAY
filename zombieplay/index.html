@@ -23,12 +23,14 @@
   <link rel="preload" href="assets/fonts/burbank-big-condensed-black.otf" as="font" type="font/otf" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/extras.css">
   <script>document.documentElement.classList.add('js')</script>
   <script src="config.js"></script>
   <script src="data/youtube.js"></script>
   <script src="assets/js/app.js" defer></script>
   <script src="assets/js/bot-goals.js" defer></script>
   <script src="assets/js/play.js" defer></script>
+  <script src="assets/js/extras.js" defer></script>
   <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
@@ -95,6 +97,8 @@
     <symbol id="i-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
     <symbol id="i-crown" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g></symbol>
+    <symbol id="i-dice" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/></g><g fill="currentColor"><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/><circle cx="12" cy="12" r="1.5"/></g></symbol>
     <symbol id="i-download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></symbol>
   </defs>
 </svg>
@@ -193,6 +197,15 @@
           </div>
         </div>
         <span class="tape" aria-hidden="true"></span>
+        <!-- שלט אופליין בסגנון מיינקראפט. נעלם לבד כשיש לייב -->
+        <div class="mc-sign" id="offlineSign" role="status">
+          <div class="mc-sign__board">
+            <b class="mc-sign__big">OFFLINE</b>
+            <span class="mc-sign__line">הזומבי ישן כרגע</span>
+            <span class="mc-sign__line mc-sign__small" id="offlineSince">חוזר ללייב בקרוב</span>
+          </div>
+          <span class="mc-sign__post" aria-hidden="true"></span>
+        </div>
         <div class="sticker" id="heroSticker">
           <span id="stickerTop"></span>
           <b id="stickerBottom"></b>
@@ -245,6 +258,15 @@
       </div>
     </div>
 
+    <div class="container vtools">
+      <div class="vsearch">
+        <svg class="icon vsearch__icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="vSearch" type="search" placeholder="חיפוש סרטון, לייב או שורט…" autocomplete="off" aria-label="חיפוש סרטון" aria-controls="vSearchList">
+        <ul class="vsearch__list" id="vSearchList" hidden></ul>
+      </div>
+      <button class="btn btn--ghost btn--sm vrandom" id="vRandom" type="button"><svg class="icon"><use href="#i-dice"/></svg> תפתיע אותי</button>
+    </div>
+
     <div class="marquee" id="videoMarquee">
       <div class="marquee__track" id="videoTrack"></div>
     </div>
@@ -255,6 +277,23 @@
     </div>
   </section>
 
+  <!-- ============ טריילר ============ -->
+  <section class="section trailer" id="trailer" hidden>
+    <div class="container trailer__grid">
+      <div class="trailer__copy">
+        <p class="eyebrow">03 / TRAILER</p>
+        <h2 class="display">הערוץ<br><span class="accent">ב-30 שניות.</span></h2>
+        <p class="lead">מיינקראפט הארדקור, משחקי אימה ומשחקי צופים. כל מה שקורה ב-ZombiePlay, בסרטון אחד.</p>
+        <div class="support__ctas">
+          <a class="btn btn--primary" data-href="ytSub" href="#" target="_blank" rel="noopener"><svg class="icon"><use href="#i-youtube"/></svg> הירשמו ביוטיוב</a>
+        </div>
+      </div>
+      <div class="trailer__media">
+        <video id="trailerVideo" src="assets/video/trailer.mp4" poster="assets/video/trailer-poster.jpg" controls playsinline preload="none" aria-label="הטריילר של הערוץ"></video>
+      </div>
+    </div>
+  </section>
+
   <div class="tear" data-seed="31" data-dir="down" aria-hidden="true"></div>
 
   <!-- ============ לינקים ============ -->
@@ -262,7 +301,7 @@
     <div class="container">
       <header class="section-head section-head--bar">
         <div>
-          <p class="eyebrow">03 / רשתות חברתיות</p>
+          <p class="eyebrow">04 / רשתות חברתיות</p>
           <h2 class="display">כל הקישורים</h2>
           <p class="lead">תעקבו בכל מקום, ככה לא תפספסו אף לייב.</p>
         </div>
@@ -278,7 +317,7 @@
     <div class="community__banner">
       <div class="community__img" id="communityImg" aria-hidden="true"></div>
       <div class="container community__head">
-        <p class="eyebrow">04 / הקהילה</p>
+        <p class="eyebrow">05 / הקהילה</p>
         <h2 class="display">הקהילה</h2>
         <p class="lead">מה קורה בערוץ עכשיו: לייבים, מטרות, הסרטונים הכי נצפים והמשחקים. הכול מתעדכן לבד.</p>
       </div>
@@ -360,12 +399,27 @@
     </div>
   </section>
 
+  <!-- ============ המספרים וציר הזמן (assets/js/extras.js, מהנתונים של הערוץ) ============ -->
+  <section class="section story" id="story">
+    <div class="container">
+      <header class="section-head section-head--bar">
+        <div>
+          <p class="eyebrow">06 / THE STORY</p>
+          <h2 class="display">הדרך של הזומבי</h2>
+          <p class="lead">מאיפה זה התחיל ואיפה זה עומד. המספרים מתעדכנים לבד.</p>
+        </div>
+      </header>
+      <ul class="numbers" id="numbers"></ul>
+      <ol class="timeline" id="timeline"></ol>
+    </div>
+  </section>
+
   <!-- ============ משחקי צופים: הגלגל, משחקי הצ'אט והפארק. המצב החי מגיע מהבוט (assets/js/play.js) ============ -->
   <section class="section play" id="play">
     <div class="container">
       <header class="section-head section-head--bar">
         <div>
-          <p class="eyebrow">05 / PLAY</p>
+          <p class="eyebrow">07 / PLAY</p>
           <h2 class="display">משחקי צופים</h2>
           <p class="lead">בלייבים הצ׳אט לא רק מדבר, הוא משחק. ככה מצטרפים.</p>
         </div>
@@ -409,11 +463,41 @@
     </div>
   </section>
 
+  <div class="tear" data-seed="57" data-dir="down" aria-hidden="true"></div>
+
+  <!-- ============ הסקין במיינקראפט: מודל תלת-ממדי שמסתובב (skinview3d) ============ -->
+  <section class="section paper skin" id="skin">
+    <div class="container skin__grid">
+      <div class="skin__copy">
+        <p class="eyebrow">08 / SKIN</p>
+        <h2 class="display">הסקין<br><span class="accent-ink">של הזומבי.</span></h2>
+        <p class="lead">ככה ZombiePlay55 נראה בתוך מיינקראפט. גוררים כדי לסובב, ובוחרים מה הוא עושה.</p>
+        <div class="skin__anims" id="skinAnims" role="group" aria-label="מה הזומבי עושה">
+          <button type="button" data-anim="walk" aria-pressed="true">הולך</button>
+          <button type="button" data-anim="run" aria-pressed="false">רץ</button>
+          <button type="button" data-anim="wave" aria-pressed="false">מנופף</button>
+          <button type="button" data-anim="idle" aria-pressed="false">עומד</button>
+        </div>
+        <div class="support__ctas">
+          <a class="btn btn--primary" id="skinDownload" href="assets/img/skin.png" download="ZombiePlay55-skin.png"><svg class="icon"><use href="#i-download"/></svg> להורדת הסקין</a>
+          <button class="btn btn--ghost" id="skinName" type="button">ZombiePlay55</button>
+        </div>
+        <p class="skin__hint muted" id="skinHint">השם במיינקראפט: ZombiePlay55. לוחצים על השם כדי להעתיק.</p>
+      </div>
+      <div class="skin__stage">
+        <canvas id="skinCanvas" width="360" height="460" aria-label="הסקין של ZombiePlay55 בתלת-ממד"></canvas>
+        <span class="skin__shadow" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="tear" data-seed="61" data-dir="up" aria-hidden="true"></div>
+
   <!-- ============ עוזרים לערוץ + סטיקרים ============ -->
   <section class="section support" id="stickers">
     <div class="container support__grid">
       <div class="support__intro">
-        <p class="eyebrow">06 / SUPPORT</p>
+        <p class="eyebrow">09 / SUPPORT</p>
         <h2 class="display" id="supportTitle"></h2>
         <p class="lead" id="supportText"></p>
         <div class="support__ctas">
