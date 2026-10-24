@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="assets/css/site.css">
   <link rel="stylesheet" href="assets/css/extras.css">
   <link rel="stylesheet" href="assets/css/dgrave.css">
+  <link rel="stylesheet" href="assets/css/slgrave.css">
   <script>document.documentElement.classList.add('js')</script>
   <script src="config.js"></script>
   <script src="data/youtube.js"></script>
@@ -33,6 +34,7 @@
   <script src="assets/js/play.js" defer></script>
   <script src="assets/js/extras.js" defer></script>
   <script src="assets/js/dgrave.js" defer></script>
+  <script src="assets/js/slgrave.js" defer></script>
   <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
@@ -523,6 +525,41 @@
     </div>
   </section>
 
+  <!-- ============ קבר הסאב והלייק: אותו קבר, ההרשמה לערוץ מ-config.js (youtube.handle) ============ -->
+  <div id="slWrap">
+    <div class="tear" data-seed="65" data-dir="down" aria-hidden="true"></div>
+
+    <section class="section paper dgrave slgrave" id="slGrave" aria-labelledby="slTitle">
+      <div class="container dgrave__grid">
+        <div class="dgrave__copy">
+          <p class="eyebrow">10 / YOUTUBE</p>
+          <h2 class="display" id="slTitle">תנו סאב<br><span class="accent-ink">ולייק.</span></h2>
+          <p class="lead">מנוי, לייק ופעמון. ככה לא מפספסים אף סרטון ואף לייב של ZombiePlay.</p>
+          <p class="dgrave__live" id="slLive" hidden><i></i><span></span></p>
+          <a class="btn btn--primary" data-sl-join href="#" target="_blank" rel="noopener"><svg class="icon"><use href="#i-youtube"/></svg> להרשמה ביוטיוב</a>
+        </div>
+
+        <div class="dgrave__stage" id="slStage">
+          <div class="dg dg--yt" id="sl">
+            <img class="dg__stone" src="assets/img/dg-stone.webp" alt="" width="370" height="470" decoding="async">
+            <img class="dg__mound" src="assets/img/dg-mound.webp" alt="" width="960" height="140" decoding="async">
+            <span class="dg__ripple" aria-hidden="true"></span>
+            <span class="dg__badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg></span>
+            <span class="dg__bell" aria-hidden="true">
+              <svg class="bw" viewBox="0 0 24 24"><path fill="#fff" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <svg class="by" viewBox="0 0 24 24"><path fill="#ffd33d" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <i>1</i>
+            </span>
+            <a class="dg__btn" data-sl-join href="#" target="_blank" rel="noopener" aria-label="הירשמו לערוץ של ZombiePlay ביוטיוב">
+              <span class="a">הירשמו</span>
+              <span class="b"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>נרשמתם</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <!-- ============ קבר הדיסקורד: קבר אחד עולה מהאדמה, הקישור מ-config.js (links.discord) ============ -->
   <div id="dgWrap">
     <div class="tear" data-seed="67" data-dir="down" aria-hidden="true"></div>
@@ -530,7 +567,7 @@
     <section class="section paper dgrave" id="discordGrave" aria-labelledby="dgTitle">
       <div class="container dgrave__grid">
         <div class="dgrave__copy">
-          <p class="eyebrow">10 / DISCORD</p>
+          <p class="eyebrow">11 / DISCORD</p>
           <h2 class="display" id="dgTitle">היכנסו<br><span class="accent-ink">לדיסקורד.</span></h2>
           <p class="lead">עדכונים על לייבים, שיחות קול, ממים והקהילה של ZombiePlay. הקבר פתוח, נכנסים.</p>
           <p class="dgrave__live" id="dgLive" hidden><i></i><span></span></p>
