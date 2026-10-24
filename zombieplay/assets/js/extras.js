@@ -295,11 +295,11 @@
       var A = { walk: sv.WalkingAnimation, run: sv.RunningAnimation, wave: sv.WaveAnimation, idle: sv.IdleAnimation }[wanted];
       if (A) viewer.animation = new A();
     }
-    $('#skinAnims button').forEach(function (b) {
+    $$('#skinAnims button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.anim === wanted));
       b.addEventListener('click', function () {
         wanted = b.dataset.anim;
-        $('#skinAnims button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        $$('#skinAnims button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
         applyAnim();
       });
     });
