@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/site.css">
   <link rel="stylesheet" href="assets/css/extras.css">
+  <link rel="stylesheet" href="assets/css/dgrave.css">
   <script>document.documentElement.classList.add('js')</script>
   <script src="config.js"></script>
   <script src="data/youtube.js"></script>
@@ -31,6 +32,7 @@
   <script src="assets/js/bot-goals.js" defer></script>
   <script src="assets/js/play.js" defer></script>
   <script src="assets/js/extras.js" defer></script>
+  <script src="assets/js/dgrave.js" defer></script>
   <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
@@ -520,6 +522,38 @@
       <ul class="sticker-grid" id="stickerGrid"></ul>
     </div>
   </section>
+
+  <!-- ============ קבר הדיסקורד: קבר אחד עולה מהאדמה, הקישור מ-config.js (links.discord) ============ -->
+  <div id="dgWrap">
+    <div class="tear" data-seed="67" data-dir="down" aria-hidden="true"></div>
+
+    <section class="section paper dgrave" id="discordGrave" aria-labelledby="dgTitle">
+      <div class="container dgrave__grid">
+        <div class="dgrave__copy">
+          <p class="eyebrow">10 / DISCORD</p>
+          <h2 class="display" id="dgTitle">היכנסו<br><span class="accent-ink">לדיסקורד.</span></h2>
+          <p class="lead">עדכונים על לייבים, שיחות קול, ממים והקהילה של ZombiePlay. הקבר פתוח, נכנסים.</p>
+          <p class="dgrave__live" id="dgLive" hidden><i></i><span></span></p>
+          <a class="btn btn--primary" data-dg-join href="#" target="_blank" rel="noopener"><svg class="icon"><use href="#i-discord"/></svg> הצטרפות לדיסקורד</a>
+        </div>
+
+        <div class="dgrave__stage" id="dgStage">
+          <div class="dg" id="dg">
+            <img class="dg__stone" src="assets/img/dg-stone.webp" alt="" width="370" height="470" loading="lazy" decoding="async">
+            <img class="dg__mound" src="assets/img/dg-mound.webp" alt="" width="960" height="140" loading="lazy" decoding="async">
+            <span class="dg__ripple" aria-hidden="true"></span>
+            <span class="dg__badge" aria-hidden="true"><img src="assets/img/dg-discord.webp" alt="" width="166" height="129"></span>
+            <a class="dg__btn" data-dg-join href="#" target="_blank" rel="noopener" aria-label="הצטרפו לדיסקורד של ZombiePlay">
+              <span class="a">הצטרפו</span>
+              <span class="b"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>הצטרפתם</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tear" data-seed="71" data-dir="up" aria-hidden="true"></div>
+  </div>
 </main>
 
 <!-- ============ פוטר ============ -->
